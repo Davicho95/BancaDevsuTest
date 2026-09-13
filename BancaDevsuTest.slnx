@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/Shared/">
+    <Project Path="Shared.Contracts/Shared.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/ClienteService/">
+    <Project Path="ClienteService.Dominio/ClienteService.Dominio.csproj" />
+    <Project Path="ClienteService.Aplicacion/ClienteService.Aplicacion.csproj" />
+    <Project Path="ClienteService.Infraestructura/ClienteService.Infraestructura.csproj" />
+    <Project Path="ClienteService.Api/ClienteService.Api.csproj" />
+  </Folder>
+  <Folder Name="/CuentaService/">
+    <Project Path="CuentaService.Dominio/CuentaService.Dominio.csproj" />
+    <Project Path="CuentaService.Aplicacion/CuentaService.Aplicacion.csproj" />
+    <Project Path="CuentaService.Infraestructura/CuentaService.Infraestructura.csproj" />
+    <Project Path="CuentaService.Api/CuentaService.Api.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="ClienteService.Dominio.Tests/ClienteService.Dominio.Tests.csproj" />
+    <Project Path="CuentaService.Dominio.Tests/CuentaService.Dominio.Tests.csproj" />
+    <Project Path="CuentaService.Api.IntegrationTests/CuentaService.Api.IntegrationTests.csproj" />
+  </Folder>
+</Solution>

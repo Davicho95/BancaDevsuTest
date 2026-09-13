@@ -1,0 +1,71 @@
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: banca-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: banca_user
+      POSTGRES_PASSWORD: banca_pass
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banca_user -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: banca-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: banca_user
+      RABBITMQ_DEFAULT_PASS: banca_pass
+    ports:
+      - "5672:5672"   # protocolo AMQP
+      - "15672:15672" # panel de administracion web
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  cliente-api:
+    build:
+      context: .
+      dockerfile: ClienteService.Api/Dockerfile
+    container_name: banca-cliente-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+    ports:
+      - "5001:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  cuenta-api:
+    build:
+      context: .
+      dockerfile: CuentaService.Api/Dockerfile
+    container_name: banca-cuenta-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+    ports:
+      - "5002:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
